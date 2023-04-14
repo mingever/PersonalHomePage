@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="icon" type="image/icon" href="https://oss.mingever.com/website/common/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mingever</title>
+    <meta name="description" content="Mingever&#39;s Homepage | Nice to meet you |•&#39;-&#39;•) ✧">
+    <!--link rel="stylesheet" href="files/index.css"-->
+    <style>
+    * {
+      padding: 0;
+      margin: 0
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: system-ui, sans-serif;
+      color: #222;
+      user-select: none;
+      background-color: #f2f2f2
+    }
+
+    .card {
+      display: flex;
+      width: 600px;
+      height: 370px;
+      margin: 0 32px;
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow: 0 3px 6px #00000026
+    }
+
+    .left {
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 180px;
+      height: 100%;
+      padding: 20px 16px;
+      border-right: 1px solid rgba(0, 0, 0, .075)
+    }
+
+    .left > div {
+      display: flex;
+      flex-direction: column;
+      align-items: center
+    }
+
+    .left .me .avatar {
+      width: 100px;
+      height: 100px;
+      padding: 12px;
+      margin-bottom: 12px;
+      border: 2px solid rgba(0, 0, 0, .075);
+      border-radius: 50%
+    }
+
+    .left .me .nickname {
+      font-size: 20px;
+      font-weight: 700
+    }
+
+    .left .links > :not(:last-child) {
+      margin-bottom: 12px
+    }
+
+    .left .links a, .left .links a:active, .left .links a:hover, .left .links a:focus, .left .links a:visited {
+      box-sizing: border-box;
+      width: 100%;
+      height: 36px;
+      padding: 0 8px;
+      color: #fff;
+      text-align: center;
+      text-decoration: none;
+      background-color: #333;
+      border-radius: 8px
+    }
+
+    .left .links a img, .left .links a:active img, .left .links a:hover img, .left .links a:focus img, .left .links a:visited img {
+      float: left;
+      height: 24px;
+      margin: 6px 4px;
+      filter: invert(100)
+    }
+
+    .left .links a span, .left .links a:active span, .left .links a:hover span, .left .links a:focus span, .left .links a:visited span {
+      font-size: 14px;
+      line-height: 36px
+    }
+
+    .left .links a:hover {
+      background-color: #555
+    }
+
+    .right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: calc(100% - 180px);
+      height: 100%
+    }
+
+    .right :not(:last-child) {
+      margin-bottom: 16px
+    }
+
+    .right p {
+      font-size: 22px;
+      font-weight: 700;
+      text-align: center
+    }
+
+    @media screen and (max-width: 512px) {
+      .card {
+        flex-direction: column;
+        height: fit-content
+      }
+
+      .card .left {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 0, 0, .075)
+      }
+
+      .card .left .links {
+        display: flex;
+        flex-direction: column;
+        margin-top: 24px
+      }
+
+      .card .left .links > a {
+        max-width: 240px
+      }
+
+      .card .right {
+        width: 100%;
+        padding: 24px 0
+      }
+    }
+  </style>
+
+</head>
+
+  <body style="min-height: 746px;">
+    <main class="card">
+      <section class="left">
+        <div class="me">
+          <img class="avatar" src="https://oss.mingever.com/website/common/avatar.jpg" alt="" draggable="false">
+          <span class="nickname">Mingever</span>
+        </div>
+        <div class="links">
+          <a href="https://blog.mingever.com" target="_self" draggable="false">
+            <img src="https://oss.mingever.com/website/svg/blog.svg" alt="" draggable="false">
+            <span>Blog</span>
+          </a>
+
+          <a href="https://github.com/mingever" target="_self" draggable="false">
+            <img src="https://oss.mingever.com/website/svg/github.svg" alt="" draggable="false">
+            <span>GitHub</span>
+          </a>
+
+          <a href="https://mingever.com/" target="_self" draggable="false">
+            <img src="https://oss.mingever.com/website/svg/lab.svg" alt="" draggable="false">
+            <span>Lab</span>
+          </a>
+        </div>
+      </section>
+      <section class="right">
+        <p>Nice to meet you</p>
+        <p>|•'-'•) ✧</p>
+      </section>
+    </main>
+</body>
+<!--因为加载顺序的关系，所以js放在body后面-->
+<!--script src="files/index.js"></script-->
+<script>
+    (function () {
+        const o = document.createElement("link").relList;
+        if (o && o.supports && o.supports("modulepreload")) return;
+        for (const e of document.querySelectorAll('link[rel="modulepreload"]')) i(e);
+        new MutationObserver(e => {
+            for (const t of e) if (t.type === "childList") for (const s of t.addedNodes) s.tagName === "LINK" && s.rel === "modulepreload" && i(s)
+        }).observe(document, {childList: !0, subtree: !0});
+
+        function n(e) {
+            const t = {};
+            return e.integrity && (t.integrity = e.integrity), e.referrerpolicy && (t.referrerPolicy = e.referrerpolicy), e.crossorigin === "use-credentials" ? t.credentials = "include" : e.crossorigin === "anonymous" ? t.credentials = "omit" : t.credentials = "same-origin", t
+        }
+
+        function i(e) {
+            if (e.ep) return;
+            e.ep = !0;
+            const t = n(e);
+            fetch(e.href, t)
+        }
+    })();
+    const l = () => {
+        const r = document.querySelector("body");
+        r.style.minHeight = `${window.innerHeight}px`
+    };
+    l();
+    const a = () => {
+        const r = document.querySelector(".me .avatar");
+        let o = !1, n = null;
+        const i = () => {
+            o || (o = !0, r.style.transition = "all 0.75s", r.style.transform = "", r.style.transform = "rotate(1turn)", setTimeout(() => {
+                r.removeAttribute("style"), o = !1
+            }, 750))
+        };
+        r.addEventListener("click", () => {
+            i()
+        }), r.addEventListener("mouseenter", () => {
+            n = setTimeout(() => {
+                i()
+            }, 500)
+        }), r.addEventListener("mouseleave", () => {
+            n && clearTimeout(n)
+        })
+    };
+    a();
+</script>
+</html>

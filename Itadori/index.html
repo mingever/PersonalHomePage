@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="https://oss.mingever.com/website/common/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="./files/style.css">
+    <title>Mingever</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <style type="text/css" data-typed-js-css="true">
+        .typed-cursor{
+            opacity: 1;
+        }
+        .typed-cursor.typed-cursor--blink{
+            animation: typedjsBlink 0.7s infinite;
+            -webkit-animation: typedjsBlink 0.7s infinite;
+            animation: typedjsBlink 0.7s infinite;
+        }
+        @keyframes typedjsBlink{
+            50% { opacity: 0.0; }
+        }
+        @-webkit-keyframes typedjsBlink{
+            0% { opacity: 1; }
+            50% { opacity: 0.0; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <div class="logo">Mingever<b>.</b></div>
+            <ul class="navItems">
+                <li><a href="#" target="_blank"><img class="icon" src="./files/bullseye-pointer.svg">&nbsp;虫洞&nbsp;| wormhole</a></li>
+                <li><a href="#" target="_blank"><img class="icon" src="./files/train.svg">&nbsp;开往&nbsp;| travelling</a></li>
+            </ul>
+            <div class="links">
+                <a href="https://wpa.qq.com/msgrd?v=3&amp;uin=1697361914&amp;site=qq&amp;menu=yes&amp;jumpflag=1" target="_blank"><i class="fab fa-qq"></i></a>
+                <a href="mailto:1697361914@qq.com"><i class="fas fa-envelope"></i></a>
+                <a href="https://github.com/mingever" target="_blank"><i class="fab fa-github"></i></a>
+            </div>
+        </nav>
+        <div class="wrapper">
+            <div class="cols cols0">
+                <span class="topline">Hello<span class="orange">_</span></span>
+                <h1>I'm
+                    <span class="multiText"></span>
+                </h1>
+                <p>I'm a senior majoring in software engineering, and this is my third personal website I've rebuilt.
+                    The following two options give blogs that record my daily life and scientific research, welcome to
+                    visit. Happy to contact you if you have any needs!</p>
+                <div class="btns">
+                    <button onclick="myDailyLife()">「demo」</button>
+                    <button onclick="myAcademic()">「demo」</button>
+                </div>
+            </div>
+            <div class="cols cols1">
+                <div class="imgbox">
+                    <img src="./files/splash.png" alt="" id="splash" >
+                    <img src="./files/ming.png" alt="" id="user">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var typingEffect = new Typed(".multiText", {
+        strings: ["Ming", "Coder", "CGer"],
+        loop: true,
+        typeSpeed: 100,
+        backSpeed: 90,
+        backDelay: 1500
+    })
+    function myAcademic() {
+        window.open("#", "_blank")
+    }
+    function myDailyLife() {
+        window.open("#", "_blank")
+    }
+</script>
+</html>
