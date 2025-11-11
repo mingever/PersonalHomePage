@@ -2,10 +2,10 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>mingever</title>
 
-<!-- 国潮毛笔字体 -->
+<!-- 引入国潮毛笔感字体（Ma Shan Zheng） -->
 <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
 
 <style>
@@ -17,43 +17,33 @@
     align-items:center;
     justify-content:center;
     font-family:"Ma Shan Zheng","PingFang SC","Microsoft Yahei",sans-serif;
-    overflow:hidden;
-  }
 
-  /* 全屏背景视频 */
-  video.bg {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    min-width: 100%;
-    min-height: 100%;
-    transform: translate(-50%, -50%);
-    object-fit: cover;
-    z-index: -1; /* 在文字后面 */
+    /* 这里改成动态GIF背景 ↓ */
+    background: url("https://oss.mingever.com/ming/bike.gif") no-repeat center center fixed;
+    background-size: cover;
   }
 
   .poster{
     color:#fff;
     text-align:center;
-    text-shadow:0 0 12px rgba(255,255,255,0.25);
+    /* 加一点背景模糊，避免字被背景影响可读性，可根据需要删除 */
+    backdrop-filter: blur(1.5px);
   }
 
   .poster h1{
+    font-family:"Ma Shan Zheng","PingFang SC","Microsoft Yahei",sans-serif;
     font-size:8vw;
     font-weight:900;
+    line-height:1.1;
     letter-spacing:0.1em;
+    text-shadow:0 0 12px rgba(255,255,255,0.25);
     margin:0;
   }
 </style>
 </head>
 <body>
-
-<!-- 将你的视频路径替换到 src里 -->
-<video class="bg" src="https://oss.mingever.com/ming/bike.mp4" autoplay loop muted></video>
-
 <div class="poster">
   <h1>把双十一 还给真光棍</h1>
 </div>
-
 </body>
 </html>
