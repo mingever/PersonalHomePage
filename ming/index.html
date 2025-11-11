@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>双十一·光棍节——每天都要快乐</title>
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --accent:#ffd166; --muted:#9aa4b2; --glass: rgba(255,255,255,0.03);
+      --radius:18px;font-family: "Helvetica Neue", Arial, "PingFang SC", "Microsoft Yahei", sans-serif;
+    }
+    html,body{height:100%;}
+    body{
+      margin:0; background: linear-gradient(180deg,#071021 0%, #0f1724 60%); color:#e6eef8; -webkit-font-smoothing:antialiased;
+      display:flex; align-items:center; justify-content:center; padding:40px 20px;
+    }
+    .wrap{width:100%; max-width:980px; margin-top: 150px;}
+    .hero{
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border-radius:22px; padding:28px; box-shadow: 0 8px 30px rgba(2,6,23,0.8); backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+    header{display:flex; align-items:center; gap:18px}
+    .logo{width:88px;height:88px;border-radius:16px;background:linear-gradient(135deg,#ff6b6b,#ffd166);display:flex;align-items:center;justify-content:center;font-weight:800;color:#08101a;font-size:22px}
+    h1{margin:0;font-size:28px}
+    p.lead{margin:6px 0 0;color:var(--muted)}
+
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:18px;margin-top:18px}
+
+    .card{background:var(--card); padding:16px;border-radius:14px;border:1px solid var(--glass)}
+    .joke{font-size:16px;line-height:1.6}
+    .joke strong{color:var(--accent)}
+
+    .deals{display:flex;flex-direction:column;gap:10px}
+    .deal{display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:12px;background:linear-gradient(90deg, rgba(255,255,255,0.02), transparent)}
+    .price{font-weight:700;color:var(--accent)}
+
+    .single-anthem{font-style:italic;color:#cfe8ff;margin-top:8px}
+
+    .fun-actions{display:flex;gap:10px;margin-top:12px}
+    button{cursor:pointer;padding:10px 12px;border-radius:10px;border:0;background:linear-gradient(90deg,#2a6cff,#6b9bff);color:white;font-weight:600}
+    .ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);}
+
+    .sidebar .card{position:sticky;top:24px}
+    .count{font-size:36px;font-weight:800;color:var(--accent)}
+
+    footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
+
+    /* Confetti */
+    #confettiCanvas{position:fixed;left:0;top:0;pointer-events:none;z-index:9999}
+
+    /* small screens */
+    @media (max-width:880px){
+      .grid{grid-template-columns:1fr;}
+      .logo{width:64px;height:64px;font-size:18px}
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confettiCanvas"></canvas>
+  <div class="wrap">
+    <div class="hero">
+      <header>
+        <div class="logo">11·11</div>
+        <div>
+          <h1>双十一 · 光棍节：快乐指南</h1>
+          <p class="lead">不论你多久，今天都值得被好好宠爱——哪怕只是一袋薯片也够庆祝。</p>
+        </div>
+      </header>
+
+      <div class="grid">
+        <main>
+          <section class="card">
+            <h2>双十一宣言</h2>
+            <p class="joke">
+              今天是双十一，也是光棍节——我给自己下了个决定：<strong>只买不会回消息的东西</strong>，因为它们至少不会在凌晨三点发来“我们能谈谈吗？”
+            </p>
+            <p class="single-anthem">“购物车里有英雄，仓库里有诗，外卖小哥是我唯一的知己。”</p>
+            <div class="fun-actions">
+              <button id="confettiBtn">庆祝一下 🎉</button>
+              <button id="addToCart" class="ghost">把快乐加入购物车 🛒</button>
+            </div>
+          </section>
+
+          <section class="card" style="margin-top:12px">
+            <h2>双十一“真香”优惠（假装值得）</h2>
+            <div class="deals">
+              <div class="deal"><div>孤独保温杯（自动保温，有灵魂）</div><div class="price">¥11.11</div></div>
+              <div class="deal"><div>搬砖健身年卡（赠送：默默付出）</div><div class="price">¥111.00</div></div>
+              <div class="deal"><div>闹钟4件套（叫你起床，也叫你起床）</div><div class="price">¥9.90</div></div>
+            </div>
+            <p style="margin-top:8px;color:var(--muted)">提示：所有商品均含免费自我安慰服务（仅限精神层面）。</p>
+          </section>
+
+          <section class="card" style="margin-top:12px">
+            <h2>双十一操作小技巧</h2>
+            <ol style="padding-left:18px;color:var(--muted)">
+              <li>把闹钟设成好歌，每天醒来都是开演唱会。</li>
+              <li>学一道好菜——就算没人看，你也值得吃得像个皇帝。</li>
+              <li>把植物当对象，结果会更稳定（植物不会冷暴力）。</li>
+            </ol>
+          </section>
+        </main>
+
+        <aside class="sidebar">
+          <div class="card">
+            <h3>祝你</h3>
+            <div class="count">念头通达</div>
+          </div>
+
+          <div class="card" style="margin-top:12px">
+            <h3>双十一小测试</h3>
+            <p style="color:var(--muted)">你的标签是？</p>
+            <p><strong id="tag">购物大师</strong></p>
+            <button id="randomTag" class="ghost">抽一个看</button>
+          </div>
+
+          <div class="card" style="margin-top:12px;text-align:center">
+            <h3>对自己说一句话</h3>
+            <input id="inputMsg" placeholder="给今天的自己一句话" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit">
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button id="sayBtn">发送到孤独宇宙</button>
+              <button id="clearBtn" class="ghost">清空</button>
+            </div>
+            <p id="echo" style="margin-top:8px;color:var(--muted)"></p>
+          </div>
+        </aside>
+      </div>
+
+      <footer>
+        祝愿今天仍在上班的你：今天买自己喜欢的东西，也给自己一个拥抱。双十一快乐！
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    // small utilities
+    function $(id){return document.getElementById(id)}
+
+    // Days single counter (mocked): random between 1 and 999
+    const days = Math.floor(Math.random()*999)+1;
+    $('daysSingle').textContent = days + ' 天';
+
+    // Tag generator
+    const tags = ['购物大师','夜猫达人','精神富翁','美食猎手','社死王者','幸福派'];
+    $('randomTag').addEventListener('click', ()=>{
+      const t = tags[Math.floor(Math.random()*tags.length)];
+      $('tag').textContent = t;
+    });
+
+    // Echo message
+    $('sayBtn').addEventListener('click', ()=>{
+      const v = $('inputMsg').value.trim();
+      if(!v){$('echo').textContent = '一句鼓励：你值得被更好对待。';return}
+      $('echo').textContent = '已发往孤独宇宙："'+v+'"';
+    });
+    $('clearBtn').addEventListener('click', ()=>{ $('inputMsg').value=''; $('echo').textContent=''; });
+
+    // Add to cart mock
+    $('addToCart').addEventListener('click', ()=>{
+      const old = $('addToCart').textContent;
+      $('addToCart').textContent = '已加入 ✅';
+      setTimeout(()=>$('addToCart').textContent = old,1200);
+    });
+
+    // Confetti simple implementation
+    (function(){
+      const canvas = document.getElementById('confettiCanvas');
+      const ctx = canvas.getContext('2d');
+      let W=canvas.width = window.innerWidth; let H=canvas.height = window.innerHeight;
+      window.addEventListener('resize', ()=>{W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight});
+      const pieces = [];
+      function rand(min,max){return Math.random()*(max-min)+min}
+      function createConfetti(x,y){
+        for(let i=0;i<60;i++){
+          pieces.push({x:x||W/2,y:y||H/2,s:rand(4,10),vx:rand(-8,8),vy:rand(-12,4),rot:rand(0,360),vr:rand(-10,10),c: ['#ffd166','#ff6b6b','#6b9bff','#9be7ff'][Math.floor(rand(0,4))]});
+        }
+      }
+      function update(){
+        ctx.clearRect(0,0,W,H);
+        for(let i=pieces.length-1;i>=0;i--){
+          const p=pieces[i];
+          p.x+=p.vx; p.y+=p.vy; p.vy+=0.45; p.rot+=p.vr;
+          ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180);
+          ctx.fillStyle=p.c; ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*0.6);
+          ctx.restore();
+          if(p.y>H+50 || p.x<-50 || p.x>W+50) pieces.splice(i,1);
+        }
+        requestAnimationFrame(update);
+      }
+      update();
+      // triggerers
+      $('confettiBtn').addEventListener('click', ()=>{createConfetti();});
+
+      // also celebrate on load
+      setTimeout(()=>createConfetti(W*0.6,H*0.3),800);
+    })();
+  </script>
+</body>
+</html>
