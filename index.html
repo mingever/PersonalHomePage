@@ -1,245 +1,239 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="icon" type="image/icon" href="https://oss.mingever.com/website/common/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mingever</title>
-    <meta name="description" content="Mingever&#39;s Homepage | Nice to meet you |•&#39;-&#39;•) ✧">
-    <!--link rel="stylesheet" href="files/index.css"-->
-    <style>
-    * {
-      padding: 0;
-      margin: 0
-    }
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/icon" href="https://mingever.oss-cn-beijing.aliyuncs.com/index/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>小满</title>
+<meta name="description" content="小满的个人名片 | 愿你阅尽千帆 归来仍是少年">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
 
-    body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      font-family: system-ui, sans-serif;
-      color: #222;
-      user-select: none;
-      background-color: #f2f2f2
-    }
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
 
-    .card {
-      display: flex;
-      width: 600px;
-      height: 370px;
-      margin: 0 32px;
-      background-color: #fff;
-      border-radius: 16px;
-      box-shadow: 0 3px 6px #00000026
-    }
+  body {
+    background: #0b0b0d;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+    overflow: hidden;
+  }
 
-    .left {
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      width: 180px;
-      height: 100%;
-      padding: 20px 16px;
-      border-right: 1px solid rgba(0, 0, 0, .075)
-    }
+  /* 舞台：承载背景视频与内容层，作为整个首屏的定位基准 */
+  .stage {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    background: radial-gradient(120% 120% at 50% 40%, #2a2a30 0%, #111114 55%, #08080a 100%);
+  }
 
-    .left > div {
-      display: flex;
-      flex-direction: column;
-      align-items: center
-    }
+  /* 背景视频：可播放后再淡入并做极缓的推近，形成镜头拉近的观感 */
+  .stage .bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(1.08);
+    transition: opacity 1.1s ease, transform 2.8s cubic-bezier(.2, .7, .2, 1);
+    will-change: opacity, transform;
+  }
 
-    .left .me .avatar {
-      width: 100px;
-      height: 100px;
-      padding: 12px;
-      margin-bottom: 12px;
-      border: 2px solid rgba(0, 0, 0, .075);
-      border-radius: 50%
-    }
+  .stage.is-ready .bg {
+    opacity: 1;
+    transform: scale(1);
+  }
 
-    .left .me .nickname {
-      font-size: 20px;
-      font-weight: 700
-    }
+  /* 压暗层：保证白色文字在任何画面亮度下都可读 */
+  .veil {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(62% 54% at 50% 50%, rgba(0, 0, 0, .58) 0%, rgba(0, 0, 0, .34) 58%, rgba(0, 0, 0, .5) 100%),
+      rgba(0, 0, 0, .14);
+  }
 
-    .left .links > :not(:last-child) {
-      margin-bottom: 12px
-    }
+  /* 内容层 */
+  .card {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    text-align: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
 
-    .left .links a, .left .links a:active, .left .links a:hover, .left .links a:focus, .left .links a:visited {
-      box-sizing: border-box;
-      width: 100%;
-      height: 36px;
-      padding: 0 8px;
-      color: #fff;
-      text-align: center;
-      text-decoration: none;
-      background-color: #333;
-      border-radius: 8px
-    }
+  /* 内容背后的柔光暗影，把文字从偏亮的画面上托出来 */
+  .card::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: min(760px, 100%);
+    height: 460px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .2) 55%, rgba(0, 0, 0, 0) 100%);
+    pointer-events: none;
+    z-index: -1;
+  }
 
-    .left .links a img, .left .links a:active img, .left .links a:hover img, .left .links a:focus img, .left .links a:visited img {
-      float: left;
-      height: 24px;
-      margin: 6px 4px;
-      filter: invert(100)
-    }
+  .avatar-wrap {
+    animation: rise .95s cubic-bezier(.16, 1, .3, 1) .35s both;
+  }
 
-    .left .links a span, .left .links a:active span, .left .links a:hover span, .left .links a:focus span, .left .links a:visited span {
+  .avatar {
+    display: block;
+    width: 132px;
+    height: 132px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, .5);
+    box-shadow:
+      0 0 0 7px rgba(255, 255, 255, .08),
+      0 22px 55px rgba(0, 0, 0, .55);
+    cursor: pointer;
+    transition: transform .85s cubic-bezier(.16, 1, .3, 1), box-shadow .5s ease;
+  }
+
+  .name {
+    margin: 30px 0 0;
+    font-size: 48px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: .2em;
+    text-indent: .2em;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, .8), 0 1px 3px rgba(0, 0, 0, .55);
+    animation: rise .95s cubic-bezier(.16, 1, .3, 1) .58s both;
+  }
+
+  .motto {
+    margin: 22px 0 0;
+    max-width: 92vw;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.95;
+    letter-spacing: .14em;
+    text-indent: .14em;
+    color: rgba(255, 255, 255, .9);
+    text-shadow: 0 2px 16px rgba(0, 0, 0, .85), 0 1px 2px rgba(0, 0, 0, .6);
+    animation: rise .95s cubic-bezier(.16, 1, .3, 1) .8s both;
+  }
+
+  .motto span { white-space: nowrap; }
+
+  /* 桌面端用全角空格把两段连成一行 */
+  .motto span + span::before { content: "\3000"; }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* 仅在存在真实指针设备时启用悬停光晕，避免触屏误触发 */
+  @media (hover: hover) and (pointer: fine) {
+    .avatar:hover {
+      box-shadow:
+        0 0 0 11px rgba(255, 255, 255, .1),
+        0 26px 60px rgba(0, 0, 0, .55);
+    }
+  }
+
+  @media screen and (max-width: 560px) {
+    .avatar { width: 104px; height: 104px; }
+    .name {
+      margin-top: 24px;
+      font-size: 36px;
+      letter-spacing: .16em;
+      text-indent: .16em;
+    }
+    .motto {
+      margin-top: 16px;
       font-size: 14px;
-      line-height: 36px
+      line-height: 2.05;
+      letter-spacing: .1em;
+      text-indent: .1em;
     }
+    /* 窄屏拆成两行，避免整句挤到边上 */
+    .motto span { display: block; }
+    .motto span + span::before { content: none; }
+  }
 
-    .left .links a:hover {
-      background-color: #555
-    }
-
-    .right {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      width: calc(100% - 180px);
-      height: 100%;
-      padding-top: 19px
-    }
-
-    .right :not(:last-child) {
-      margin-bottom: 16px
-    }
-
-    .right p {
-      font-size: 22px;
-      font-weight: 700;
-      text-align: center
-    }
- 
-    .wide-spacing {
-      letter-spacing: 2px; /* 调整字符间距 */
-      line-height: 0.8;    /* 调整行间距 */
-    }
-
-    @media screen and (max-width: 512px) {
-      .card {
-        flex-direction: column;
-        height: fit-content
-      }
-
-      .card .left {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid rgba(0, 0, 0, .075)
-      }
-
-      .card .left .links {
-        display: flex;
-        flex-direction: column;
-        margin-top: 24px
-      }
-
-      .card .left .links > a {
-        max-width: 240px
-      }
-
-      .card .right {
-        width: 100%;
-        padding: 24px 0
-      }
-    }
-
-    /* 定义闪烁动画 */
-    @keyframes blink {
-        0% { opacity: 1; }
-        50% { opacity: 0; }
-        100% { opacity: 1; }
-    }
-
-    /* 应用闪烁动画和黄色颜色 */
-    .blinking-star {
-        color: rgb(255, 215, 0); /* 设置为黄色 */
-        animation: blink 1s infinite; /* 闪烁动画，1秒一次，无限循环 */
-    }
-  </style>
-
+  /* 尊重系统的“减少动态效果”设置 */
+  @media (prefers-reduced-motion: reduce) {
+    .stage .bg { transition: none; opacity: 1; transform: none; }
+    .avatar-wrap, .name, .motto { animation: none; }
+    .avatar { transition: none; }
+  }
+</style>
 </head>
 
-  <body style="min-height: 746px;">
+<body>
+  <div class="stage" id="stage">
+    <video class="bg" id="bgVideo"
+           autoplay muted loop playsinline preload="auto"
+           disablepictureinpicture aria-hidden="true">
+      <source src="https://mingever.oss-cn-beijing.aliyuncs.com/index/main.mp4" type="video/mp4">
+    </video>
+    <div class="veil" aria-hidden="true"></div>
+
     <main class="card">
-      <section class="left">
-        <div class="me">
-          <img class="avatar" src="https://oss.mingever.com/website/common/avatar.jpg" alt="" draggable="false">
-          <span class="nickname">Mingever</span>
-        </div>
-        <div class="links">
-          <a href="https://blog.mingever.com" target="_self" draggable="false">
-            <img src="https://oss.mingever.com/website/svg/blog.svg" alt="" draggable="false">
-            <span>Blog</span>
-          </a>
-
-          <a href="https://github.com/mingever" target="_self" draggable="false">
-            <img src="https://oss.mingever.com/website/svg/github.svg" alt="" draggable="false">
-            <span>GitHub</span>
-          </a>
-
-          <a href="./Itadori/index.html" target="_self" draggable="false">
-            <img src="https://oss.mingever.com/website/svg/lab.svg" alt="" draggable="false">
-            <span>Lab</span>
-          </a>
-        </div>
-      </section>
-      <section class="right">
-        <p class="wide-spacing">愿你阅尽千帆</p>
-        <p class="wide-spacing">归来仍是少年</p>
-        <p><span style="font-size: smaller;"> |•'-'•)</span><span class="blinking-star"> ✧</span></p>
-      </section>
+      <div class="avatar-wrap">
+        <img class="avatar" id="avatar"
+             src="https://mingever.oss-cn-beijing.aliyuncs.com/index/avatar.jpg"
+             alt="小满" draggable="false">
+      </div>
+      <h1 class="name">小满</h1>
+      <p class="motto"><span>愿你阅尽千帆</span><span>归来仍是少年</span></p>
     </main>
-</body>
-<!--因为加载顺序的关系，所以js放在body后面-->
-<!--script src="files/index.js"></script-->
-<script>
+  </div>
+
+  <script>
     (function () {
-        const o = document.createElement("link").relList;
-        if (o && o.supports && o.supports("modulepreload")) return;
-        for (const e of document.querySelectorAll('link[rel="modulepreload"]')) i(e);
-        new MutationObserver(e => {
-            for (const t of e) if (t.type === "childList") for (const s of t.addedNodes) s.tagName === "LINK" && s.rel === "modulepreload" && i(s)
-        }).observe(document, {childList: !0, subtree: !0});
+      var stage = document.getElementById('stage');
+      var video = document.getElementById('bgVideo');
+      var avatar = document.getElementById('avatar');
+      var revealed = false;
 
-        function n(e) {
-            const t = {};
-            return e.integrity && (t.integrity = e.integrity), e.referrerpolicy && (t.referrerPolicy = e.referrerpolicy), e.crossorigin === "use-credentials" ? t.credentials = "include" : e.crossorigin === "anonymous" ? t.credentials = "omit" : t.credentials = "same-origin", t
-        }
+      // 背景视频具备播放条件后再淡入，避免首屏出现黑块或半张画面
+      function reveal() {
+        if (revealed) return;
+        revealed = true;
+        stage.classList.add('is-ready');
+      }
 
-        function i(e) {
-            if (e.ep) return;
-            e.ep = !0;
-            const t = n(e);
-            fetch(e.href, t)
-        }
+      if (video.readyState >= 2) {
+        reveal();
+      } else {
+        video.addEventListener('canplay', reveal, { once: true });
+        // 兜底：视频加载失败或过慢时，3 秒后也让内容正常呈现
+        setTimeout(reveal, 3000);
+      }
+
+      // 点击头像旋转一圈
+      var spinning = false;
+      avatar.addEventListener('click', function () {
+        if (spinning) return;
+        spinning = true;
+        avatar.style.transition = 'transform .8s cubic-bezier(.16, 1, .3, 1)';
+        avatar.style.transform = 'rotate(360deg)';
+        setTimeout(function () {
+          avatar.style.transition = '';
+          avatar.style.transform = '';
+          spinning = false;
+        }, 820);
+      });
     })();
-    const l = () => {
-        const r = document.querySelector("body");
-        r.style.minHeight = `${window.innerHeight}px`
-    };
-    l();
-    const a = () => {
-        const r = document.querySelector(".me .avatar");
-        let o = !1, n = null;
-        const i = () => {
-            o || (o = !0, r.style.transition = "all 0.75s", r.style.transform = "", r.style.transform = "rotate(1turn)", setTimeout(() => {
-                r.removeAttribute("style"), o = !1
-            }, 750))
-        };
-        r.addEventListener("click", () => {
-            i()
-        }), r.addEventListener("mouseenter", () => {
-            n = setTimeout(() => {
-                i()
-            }, 500)
-        }), r.addEventListener("mouseleave", () => {
-            n && clearTimeout(n)
-        })
-    };
-    a();
-</script>
+  </script>
+</body>
 </html>
