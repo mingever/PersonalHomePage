@@ -291,26 +291,24 @@
         void webp.offsetWidth;   // 强制回流，保证淡入过渡正常触发
       }
 
-      // 切到视频：桌面与移动端浏览器都能正常自动播放，画质最好
+      // 切到视频：先尝试播放，能播就用视频，画质最好
       function useVideo() {
-        video.addEventListener('canplay', reveal, { once: true });
         video.addEventListener('error', useWebp, { once: true });
         video.src = VIDEO_URL;
         video.classList.add('is-on');
         void video.offsetWidth;
+
         var played = video.play ? video.play() : null;
-        if (played && played.catch) {
-          // 自动播放被拦截时回落到动图
-          played.catch(useWebp);
+        if (played && played.then) {
+          // 真正开始播放后才结束加载态；被容器拦截时回落到动图
+          played.then(reveal).catch(useWebp);
+        } else {
+          video.addEventListener('canplay', reveal, { once: true });
         }
       }
 
-      // 微信内置浏览器（含企业微信）直接走动图，连视频都不发起下载
-      if (/MicroMessenger|wxwork/i.test(navigator.userAgent)) {
-        useWebp();
-      } else {
-        useVideo();
-      }
+      // 不按浏览器类型判断：统一先试视频，播不了再回落动图
+      useVideo();
 
       // 兜底：长时间未就绪时也结束加载态，避免一直停在转圈
       setTimeout(reveal, 10000);
