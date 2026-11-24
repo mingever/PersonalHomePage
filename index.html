@@ -32,8 +32,9 @@
     background: radial-gradient(120% 120% at 50% 40%, #2a2a30 0%, #111114 55%, #08080a 100%);
   }
 
-  /* 背景视频：可播放后再淡入并做极缓的推近，形成镜头拉近的观感 */
-  .stage .bg {
+  /* 背景层：视频与动图共用同一套定位和入场动效 */
+  .bg,
+  .bg-webp {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -45,9 +46,46 @@
     will-change: opacity, transform;
   }
 
-  .stage.is-ready .bg {
+  /* 只保留当前选中的背景层，另一层既不渲染也不发起加载 */
+  .bg:not(.is-on),
+  .bg-webp:not(.is-on) {
+    display: none;
+  }
+
+  .stage.is-ready .bg.is-on,
+  .stage.is-ready .bg-webp.is-on {
     opacity: 1;
     transform: scale(1);
+  }
+
+  /* 首屏加载层：背景资源就绪前只露出转圈，避免看到未加载完的画面 */
+  .loader {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0b0b0d;
+    transition: opacity .55s ease, visibility .55s ease;
+  }
+
+  .loader.is-done {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .spinner {
+    width: 34px;
+    height: 34px;
+    border: 2px solid rgba(255, 255, 255, .15);
+    border-top-color: rgba(255, 255, 255, .8);
+    border-radius: 50%;
+    animation: spinner-rotate .85s linear infinite;
+  }
+
+  @keyframes spinner-rotate {
+    to { transform: rotate(360deg); }
   }
 
   /* 压暗层：保证白色文字在任何画面亮度下都可读 */
@@ -140,6 +178,19 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
+  /* 背景就绪前暂停入场动画，避免加载期间动画提前跑完 */
+  .avatar-wrap,
+  .name,
+  .motto {
+    animation-play-state: paused;
+  }
+
+  .stage.is-ready .avatar-wrap,
+  .stage.is-ready .name,
+  .stage.is-ready .motto {
+    animation-play-state: running;
+  }
+
   /* 仅在存在真实指针设备时启用悬停光晕，避免触屏误触发 */
   @media (hover: hover) and (pointer: fine) {
     .avatar:hover {
@@ -171,7 +222,7 @@
 
   /* 尊重系统的“减少动态效果”设置 */
   @media (prefers-reduced-motion: reduce) {
-    .stage .bg { transition: none; opacity: 1; transform: none; }
+    .bg, .bg-webp { transition: none; opacity: 1; transform: none; }
     .avatar-wrap, .name, .motto { animation: none; }
     .avatar { transition: none; }
   }
@@ -179,13 +230,17 @@
 </head>
 
 <body>
+  <div class="loader" id="loader" aria-hidden="true">
+    <span class="spinner"></span>
+  </div>
+
   <div class="stage" id="stage">
+    <!-- 微信内置浏览器会拦截视频自动播放，这一层专门给它用动图 -->
+    <img class="bg-webp" id="bgWebp" alt="" aria-hidden="true">
+
     <video class="bg" id="bgVideo"
-           poster="./poster.jpg"
            autoplay muted loop playsinline webkit-playsinline x5-playsinline
-           preload="auto" disablepictureinpicture aria-hidden="true">
-      <source src="https://mingever.oss-cn-beijing.aliyuncs.com/index/main.mp4" type="video/mp4">
-    </video>
+           preload="none" disablepictureinpicture aria-hidden="true"></video>
     <div class="veil" aria-hidden="true"></div>
 
     <main class="card">
@@ -203,33 +258,62 @@
     (function () {
       var stage = document.getElementById('stage');
       var video = document.getElementById('bgVideo');
+      var webp  = document.getElementById('bgWebp');
+      var loader = document.getElementById('loader');
       var avatar = document.getElementById('avatar');
-      var revealed = false;
 
-      // 背景视频具备播放条件后再淡入，避免首屏出现黑块或半张画面
+      var VIDEO_URL = 'https://mingever.oss-cn-beijing.aliyuncs.com/index/main.mp4';
+      var WEBP_URL  = 'https://mingever.oss-cn-beijing.aliyuncs.com/index/main.webp';
+
+      var revealed = false;
       function reveal() {
         if (revealed) return;
         revealed = true;
+        // 背景就绪后同时收起转圈、放出内容入场动画
+        loader.classList.add('is-done');
         stage.classList.add('is-ready');
       }
 
-      // 主动触发播放：部分 App 内浏览器不执行 autoplay 属性，需要显式调用
-      var played = video.play ? video.play() : null;
-      if (played && played.catch) {
-        // 自动播放被拦截（iOS 低电量模式、微信内置浏览器等）时静默失败，
-        // 此时由封面图代替视频呈现，避免整屏发黑
-        played.catch(function () {});
+      // 切到动图：微信这类容器会拦截视频自动播放，用动图绕过该限制
+      var usingWebp = false;
+      function useWebp() {
+        if (usingWebp) return;
+        usingWebp = true;
+        // 视频若已开始下载则取消，避免继续占用流量
+        video.removeAttribute('src');
+        try { video.load(); } catch (e) {}
+        video.classList.remove('is-on');
+
+        webp.addEventListener('load', reveal, { once: true });
+        webp.addEventListener('error', reveal, { once: true });
+        webp.src = WEBP_URL;
+        webp.classList.add('is-on');
+        void webp.offsetWidth;   // 强制回流，保证淡入过渡正常触发
       }
 
-      if (video.readyState >= 2) {
-        reveal();
-      } else {
+      // 切到视频：桌面与移动端浏览器都能正常自动播放，画质最好
+      function useVideo() {
         video.addEventListener('canplay', reveal, { once: true });
-        // 视频加载失败时同样要让封面和文字正常呈现
-        video.addEventListener('error', reveal, { once: true });
-        // 兜底：视频加载失败或过慢时，3 秒后也让内容正常呈现
-        setTimeout(reveal, 3000);
+        video.addEventListener('error', useWebp, { once: true });
+        video.src = VIDEO_URL;
+        video.classList.add('is-on');
+        void video.offsetWidth;
+        var played = video.play ? video.play() : null;
+        if (played && played.catch) {
+          // 自动播放被拦截时回落到动图
+          played.catch(useWebp);
+        }
       }
+
+      // 微信内置浏览器（含企业微信）直接走动图，连视频都不发起下载
+      if (/MicroMessenger|wxwork/i.test(navigator.userAgent)) {
+        useWebp();
+      } else {
+        useVideo();
+      }
+
+      // 兜底：长时间未就绪时也结束加载态，避免一直停在转圈
+      setTimeout(reveal, 10000);
 
       // 点击头像旋转一圈
       var spinning = false;
